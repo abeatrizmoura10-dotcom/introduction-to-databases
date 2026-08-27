@@ -11,16 +11,19 @@
 
 ## 1. IDENTIFICAÇÃO DA ENTREGA
 
-- **Equipe:** `team-06`
-- **Semana / Sprint:** `01`
-- **Período da entrega:** `27/08/2026 a 03/08/2026`
+- **Equipe:** `team-XX`
+- **Semana / Sprint:** `xx`
+- **Período da entrega:** `DM/MM/AAAA a DD/MM/AAAA`
 - **Issue da semana:** `#XX`
-- **Branch da equipe:** `team-06-sprint-01`
+- **Branch da equipe:** `team-XX-sprint-XX`
 - **Pull Request:** `#XX`
 
 ### Integrantes
 
-- Nome Anna Beatriz Oliveira Moura
+- Nome 1
+- Nome 2
+- Nome 3
+- Nome 4
 
 ---
 
@@ -30,16 +33,13 @@
 
 Descreva, em uma frase clara e objetiva, o que deverá estar funcionando ao final da semana.
 
-> A ideia seria criar um banco de dados com notas de filmes de terror contendo as tabelas `nome`, `diretor`, `notas` e `subgenero`, com suas respectivas chaves primárias e estrangeiras.
-
 > Exemplo: Criar o esquema inicial do banco de dados da equipe contendo as tabelas `cliente`, `produto` e `pedido`, com suas respectivas chaves primárias e estrangeiras.
 
 ### Está dentro do escopo
 
-- <item 1> Nome do Filme
-- <item 2> Nome do Diretor
-- <item 3> Subgênero
-- <item 4> Notas
+- <item 1>
+- <item 2>
+- <item 3>
 
 ### Está fora do escopo
 
