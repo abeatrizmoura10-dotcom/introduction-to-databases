@@ -35,11 +35,11 @@ Nesta Sprint 1/5, o foco é exclusivamente o **planejamento do banco de dados**.
 
 **Nome completo:**
 
-> Preencha aqui.
+> Anna Beatriz Oliveira Moura
 
 **Nome escolhido para o banco de dados:**
 
-```text
+```Locação de Filmes
 
 ```
 
@@ -73,7 +73,7 @@ Alguns exemplos:
 
 ### Tema escolhido
 
-> Escreva aqui.
+> Locadora
 
 ---
 
@@ -90,7 +90,9 @@ A descrição deve responder:
 
 ### Descrição
 
-> Escreva aqui.
+> Escreva aqui. O sistema representa uma locadora de filmes, seria uma época antes dos streamings acabarem com elas.
+> 2.Gerente, Funcionário
+> 3.Nome do Filme, Ano do Filme, Avaliação do Filme, Gênero do Filme, Avaliação do Filme, Diretor do Filme
 
 ---
 
