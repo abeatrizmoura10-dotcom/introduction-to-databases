@@ -179,7 +179,7 @@ Cliente
 | id_cliente | Identificador único do cliente | INT | Sim |
 | nome | Nome completo do cliente | VARCHAR(100) | Sim |
 | cpf | CPF do cliente | VARCHAR(14) | Sim |
-| telefone | Telefone de contato | VARCHAR(14) | Não |
+| telefone | Telefone de contato | VARCHAR(20) | Não |
 | email | E-mail do cliente | VARCHAR(100) | Não |
 
 ## Entidade 2
@@ -254,7 +254,7 @@ Cada tabela deverá possuir uma forma de identificar unicamente seus registros.
 | Filme | id_filme | Identifica cada gênero de forma única. |
 | Gênero | id_genero | Identifica cada gênero de forma única. |
 | Locação | id_locacao | Identifica cada operação de locação realizada. |
-|Item_Locação | id_item | Identifica cada item de filme associado a uma locação. |
+| Item_Locação | id_item | Identifica cada item de filme associado a uma locação. |
 
 Considere:
 
@@ -341,7 +341,7 @@ AUTO_INCREMENT
 | Tabela | Atributo | Restrição prevista | Motivo |
 |---|---|---|---|
 | Cliente | id_cliente | PRIMARY KEY, AUTO_INCRMENT | Identificar cada cliente de forma única e gerar o identificador automaticamente. |
-| Cliente | cpf | UNIQUE, NOT NULL | Evitar o cadasstro de dois clientes com o mesmo CPF. |
+| Cliente | cpf | UNIQUE, NOT NULL | Evitar o cadastro de dois clientes com o mesmo CPF. |
 | Funcionário | id_funcionario | PRIMARY KEY, AUTO_INCREMENT | Identificar cada funcionário de forma única. |
 | Funcionário | cpf | UNIQUE, NOT NULL | Evitar o cadastro de dois funcionários com o mesmo CPF. |
 | Filme | id_genero | FOREGEIN KEY, NOT NULL | Garantir que o gênero informado exista na tabela Gênero. |
