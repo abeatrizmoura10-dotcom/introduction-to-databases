@@ -132,7 +132,38 @@ USE loja_virtual;
 ## Código utilizado no seu projeto
 
 ```sql
--- Copie aqui o código utilizado.
+CREATE DATABASE IF NOT EXISTS db_conveniencia;
+USE db_conveniencia;
+  
+CREATE TABLE Categoria(
+id_categoria INT PRIMARY KEY auto_increment,
+nome_categoria VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Produto(
+id_produto INT PRIMARY KEY auto_increment,
+id_categoria INT,
+codigo_barras VARCHAR(50) UNIQUE,
+nome_produto VARCHAR(100) NOT NULL,
+preco_venda DECIMAL(10,2) CHECK (preco_venda >= 0),
+quantidade_estoque INT CHECK (quantidade_estoque >=0),
+FOREIGN KEY (id_categoria) references Categoria(id_categoria)
+);
+
+CREATE TABLE Venda(
+id_venda INT auto_increment PRIMARY KEY,
+data_venda DATETIME DEFAULT current_timestamp,
+valor_total DECIMAL(10,2)
+);
+
+CREATE TABLE Item_venda(
+quantidade int,
+id_venda INT,
+id_produto int,
+PRIMARY KEY (id_venda, id_produto),
+FOREIGN KEY (id_venda) REFERENCES Venda(id_venda),
+FOREIGN KEY (id_produto) REFERENCES Produto(id_produto)
+);
 
 ```
 
@@ -141,7 +172,7 @@ USE loja_virtual;
 ```text
 
 ```
-
+db_conveniencia
 ---
 
 # 4. Tipos de dados
@@ -210,10 +241,10 @@ CREATE TABLE nome_tabela (
 
 | Nº | Nome da tabela | Finalidade |
 |---:|---|---|
-| 1 |  |  |
-| 2 |  |  |
-| 3 |  |  |
-| 4 |  |  |
+| 1 | Categoria | Armezenar o Nome da categoria e também o ID da categoria |
+| 2 | Produto | Armazenar o Id do produto, Id da categoria o codigo de barras, o nome do produto, a quantidade do estoque e o preco da venda |
+| 3 | Venda | Vai guardar o ID da venda, a data da venda e o Valor total da venda |
+| 4 | Item_venda | vai Armazenar a quantidade de itens, o id da venda e o id do produto |
 | 5 |  |  |
 | 6 |  |  |
 
@@ -246,10 +277,10 @@ Se `PEDIDO` possui uma FK para `CLIENTE`, então `CLIENTE` deve existir antes de
 
 ## Ordem definida para o seu projeto
 
-1. 
-2. 
-3. 
-4. 
+1. Categoria
+2. Produto
+3. Venda
+4. Item_venda
 5. 
 6. 
 
@@ -275,9 +306,9 @@ id_cliente INT PRIMARY KEY AUTO_INCREMENT
 
 | Tabela | Chave primária | Utiliza `AUTO_INCREMENT`? |
 |---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
+| Categoria | id_categoria | Sim |
+| Produto | id_produto | Sim |
+| Venda | id_venda | Sim |
 |  |  |  |
 
 ---
@@ -298,8 +329,8 @@ Não utilize `NOT NULL` indiscriminadamente. A restrição deve refletir uma reg
 
 | Tabela | Campo | Por que é obrigatório? |
 |---|---|---|
-|  |  |  |
-|  |  |  |
+| Categoria | nome_categoria | Pelo fato de carregar o nome da categoria, isso e importante pra idetificação |
+| Produto | nome_produto | Mesma razão do nome da categoria, por carregar o nome do produto e é importante pra identifição |
 |  |  |  |
 
 ---
@@ -324,7 +355,7 @@ cpf CHAR(11) NOT NULL UNIQUE
 
 | Tabela | Campo | Por que não pode se repetir? |
 |---|---|---|
-|  |  |  |
+| Produto | codigo_barras | por ser um codigo unico destinado ao produto pelo fornecedor |
 |  |  |  |
 
 Caso nenhuma seja necessária, justifique:
@@ -353,7 +384,7 @@ status VARCHAR(20) NOT NULL DEFAULT 'ATIVO'
 
 | Tabela | Campo | DEFAULT | Justificativa |
 |---|---|---|---|
-|  |  |  |  |
+| Venda | data_venda | DATETIME DEFAULT | Ele vai pegar o horario atual do computador, então usar default eu já deixo claro que ele sempre vai tentar pegar o horario padrão da maquina |
 |  |  |  |  |
 
 Caso não utilize `DEFAULT`, justifique:
@@ -407,9 +438,9 @@ Verifique se:
 
 | Tabela | Campo FK | Referencia | Relacionamento |
 |---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+| Produto |FOREIGN KEY (id_categoria)| references Categoria(id_categoria) | 1:N Uma categoria possui varios produtos |
+| item_venda | FOREIGN KEY (id_venda) | REFERENCES Venda(id_venda) | 1:N uma venda pode conter varios itens |
+| item_venda | FOREIGN KEY (id_produto) | REFERENCES Produto(id_produto) | 1:N um produto aparece em varias vendas |
 
 ---
 
@@ -458,12 +489,12 @@ CREATE TABLE tabela_associativa (
 
 ## Seu banco possui relacionamento N:N?
 
-- [ ] Sim
+- [X] Sim
 - [ ] Não
 
 Se sim, explique como foi implementado:
 
-> Escreva aqui.
+> Teoricamente o relacionamento N:N seria da bomba da venda pro produto, mas deu pra resolver isso criando a tabela item_venda pra não precisar ficar se preocupando com isso
 
 ---
 
@@ -497,13 +528,14 @@ ADD CONSTRAINT uq_nome UNIQUE (novo_campo);
 ## ALTER TABLE utilizado no projeto
 
 ```sql
--- Cole aqui o comando executado.
+ALTER TABLE categoria 
+ADD COLUMN meu_pedido VARCHAR(100);
 
 ```
 
 ### Explique a alteração
 
-> Escreva aqui.
+> Fiz essa mudança rapida para demonstrar que meu comando foi executado com clareza no ALTER TABLE, mas que por enquanto no comando final ele não vai existir por não ter necessidade
 
 ---
 
@@ -528,7 +560,8 @@ DROP TABLE tabela_teste;
 ## Código executado
 
 ```sql
--- Cole aqui o teste realizado.
+DROP TABLE item_venda;
+19:51:18	DROP TABLE item_venda	0 row(s) affected	0.016 sec
 
 ```
 
@@ -546,7 +579,7 @@ e:
 DROP TABLE tabela;
 ```
 
-> Responda aqui.
+> O DELETE FROM você tá tentando arrancar algum parametro que existe na tabela que você está entrando, agora no DROP TABLE você está arrancando totalmente a tabela e todos os seus parametros, então tem essa diferença: Num você vai tirar apenas um parametro e no outro você vai tirar a tabela toda.
 
 ---
 
@@ -561,85 +594,74 @@ Adapte tudo ao tema escolhido na Sprint 1/5.
 ```sql
 -- ============================================================
 -- SPRINT 2/5
--- MODELO GENÉRICO DE BANCO RELACIONAL
+-- MODELO Vendas e Produtos (Loja de Conveniência).
 -- ============================================================
 
-CREATE DATABASE nome_do_banco;
+CREATE DATABASE db_conveniencia;
 
-USE nome_do_banco;
+USE db_conveniencia;
 
 -- ------------------------------------------------------------
--- TABELA 1 — independente
+-- TABELA 1 — Categoria
 -- ------------------------------------------------------------
 
-CREATE TABLE tabela_a (
-    id_a INT PRIMARY KEY AUTO_INCREMENT,
-    campo_a1 VARCHAR(100) NOT NULL,
-    campo_a2 VARCHAR(150) UNIQUE,
-    campo_a3 DATE
+CREATE TABLE Categoria (
+     id_categoria INT PRIMARY KEY auto_increment,
+    nome_categoria VARCHAR(50) NOT NULL
 );
 
 -- ------------------------------------------------------------
--- TABELA 2 — independente
+-- TABELA 2 — Produto
 -- ------------------------------------------------------------
 
-CREATE TABLE tabela_b (
-    id_b INT PRIMARY KEY AUTO_INCREMENT,
-    campo_b1 VARCHAR(100) NOT NULL,
-    campo_b2 DECIMAL(10,2) NOT NULL,
-    campo_b3 BOOLEAN NOT NULL DEFAULT TRUE
+CREATE TABLE Produto (
+      id_produto INT PRIMARY KEY auto_increment,
+      id_categoria INT,
+      codigo_barras VARCHAR(50) UNIQUE,
+      nome_produto VARCHAR(100) NOT NULL,
+      preco_venda DECIMAL(10,2) CHECK (preco_venda >= 0),
+      quantidade_estoque INT CHECK (quantidade_estoque >=0),
+      FOREIGN KEY (id_categoria) references Categoria(id_categoria)
 );
 
 -- ------------------------------------------------------------
--- TABELA 3 — relacionada à tabela_a
+-- TABELA 3 — Venda
 -- ------------------------------------------------------------
-
-CREATE TABLE tabela_c (
-    id_c INT PRIMARY KEY AUTO_INCREMENT,
-    id_a INT NOT NULL,
-    campo_c1 DATE NOT NULL,
-
-    CONSTRAINT fk_tabela_c_tabela_a
-        FOREIGN KEY (id_a)
-        REFERENCES tabela_a(id_a)
+   CREATE TABLE Venda(
+    id_venda INT auto_increment PRIMARY KEY,
+    data_venda DATETIME DEFAULT current_timestamp,
+    valor_total DECIMAL(10,2)
 );
 
 -- ------------------------------------------------------------
--- TABELA 4 — exemplo de tabela associativa
+-- TABELA 4 — Item_venda
 -- ------------------------------------------------------------
-
-CREATE TABLE tabela_d (
-    id_c INT NOT NULL,
-    id_b INT NOT NULL,
-    quantidade INT NOT NULL,
-
-    PRIMARY KEY (id_c, id_b),
-
-    CONSTRAINT fk_tabela_d_tabela_c
-        FOREIGN KEY (id_c)
-        REFERENCES tabela_c(id_c),
-
-    CONSTRAINT fk_tabela_d_tabela_b
-        FOREIGN KEY (id_b)
-        REFERENCES tabela_b(id_b)
+      CREATE TABLE Item_venda(
+      quantidade int,
+      id_venda INT,
+      id_produto int,
+      PRIMARY KEY (id_venda, id_produto),
+      FOREIGN KEY (id_venda) REFERENCES Venda(id_venda),
+      FOREIGN KEY (id_produto) REFERENCES Produto(id_produto)
 );
 
 -- ------------------------------------------------------------
 -- ALTER TABLE
 -- ------------------------------------------------------------
 
-ALTER TABLE tabela_a
-ADD COLUMN campo_novo VARCHAR(100);
+ALTER TABLE categoria 
+ADD COLUMN meu_pedido VARCHAR(100);
 
 -- ------------------------------------------------------------
 -- TABELA TEMPORÁRIA PARA PRATICAR DROP TABLE
 -- ------------------------------------------------------------
 
-CREATE TABLE tabela_teste (
-    id_teste INT PRIMARY KEY
+CREATE TABLE meus_pedidos (
+    id_meus INT PRIMARY KEY
 );
 
-DROP TABLE tabela_teste;
+DROP TABLE meus_pedidos;
+
 ```
 
 ---
@@ -717,10 +739,10 @@ Faça isso para cada tabela criada.
 
 | Tabela | `DESCRIBE` executado? | Estrutura correta? |
 |---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
+| Categoria | Sim | Sim |
+| Produto | Sim | Sim |
+| Venda | Sim | Sim |
+| Item_venda | Sim | Sim |
 
 ---
 
@@ -903,26 +925,26 @@ SPRINT5-5.sql
 
 Antes de finalizar:
 
-- [ ] utilizei como base a `SPRINT1-5.md`;
-- [ ] criei um banco de dados;
-- [ ] utilizei `USE`;
-- [ ] criei pelo menos 4 tabelas relacionadas;
-- [ ] todas as tabelas possuem chave primária;
-- [ ] utilizei tipos de dados coerentes;
-- [ ] apliquei `NOT NULL` quando necessário;
-- [ ] apliquei `UNIQUE` quando necessário;
-- [ ] apliquei `DEFAULT` quando necessário;
-- [ ] implementei as chaves estrangeiras necessárias;
-- [ ] respeitei a ordem de criação das tabelas;
-- [ ] tratei corretamente relacionamentos N:N, caso existam;
-- [ ] executei pelo menos um `ALTER TABLE`;
-- [ ] pratiquei `DROP TABLE` em tabela temporária;
-- [ ] executei `DESCRIBE` nas tabelas;
-- [ ] verifiquei as tabelas no painel Schemas;
-- [ ] corrigi erros de execução;
-- [ ] organizei o script final;
-- [ ] salvei o script como `SPRINT2-5.sql`;
-- [ ] preenchi completamente este `SPRINT2-5.md`.
+- [X] utilizei como base a `SPRINT1-5.md`;
+- [X] criei um banco de dados;
+- [X] utilizei `USE`;
+- [X] criei pelo menos 4 tabelas relacionadas;
+- [X] todas as tabelas possuem chave primária;
+- [x] utilizei tipos de dados coerentes;
+- [x] apliquei `NOT NULL` quando necessário;
+- [x] apliquei `UNIQUE` quando necessário;
+- [x] apliquei `DEFAULT` quando necessário;
+- [x] implementei as chaves estrangeiras necessárias;
+- [x] respeitei a ordem de criação das tabelas;
+- [x] tratei corretamente relacionamentos N:N, caso existam;
+- [x] executei pelo menos um `ALTER TABLE`;
+- [x] pratiquei `DROP TABLE` em tabela temporária;
+- [x] executei `DESCRIBE` nas tabelas;
+- [x] verifiquei as tabelas no painel Schemas;
+- [x] corrigi erros de execução;
+- [x] organizei o script final;
+- [x] salvei o script como `SPRINT2-5.sql`;
+- [X] preenchi completamente este `SPRINT2-5.md`.
 
 ---
 

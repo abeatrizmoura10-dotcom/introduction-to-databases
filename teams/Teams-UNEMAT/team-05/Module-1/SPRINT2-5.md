@@ -133,6 +133,65 @@ USE loja_virtual;
 
 ```sql
 -- Copie aqui o código utilizado.
+CREATE DATABASE Clinica_Ser;
+USE Clinica_Ser;
+
+-- Tabela Paciente
+CREATE TABLE Paciente (
+    id_paciente INT AUTO_INCREMENT PRIMARY KEY,
+    nome_completo VARCHAR(100) NOT NULL,
+    data_nascimento DATE NOT NULL,
+    telefone VARCHAR(15),
+    sexo ENUM('M','F') NOT NULL,
+    cpf VARCHAR(11) NOT NULL UNIQUE,
+    imagem VARCHAR(255)
+);
+
+-- Tabela Médico
+CREATE TABLE Medico (
+    id_medico INT AUTO_INCREMENT PRIMARY KEY,
+    nome_completo VARCHAR(100) NOT NULL,
+    crm VARCHAR(20) NOT NULL UNIQUE,
+    especialidade VARCHAR(50)
+);
+
+-- Tabela Convênio
+CREATE TABLE Convenio (
+    id_convenio INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL
+);
+
+-- Paciente vinculado a Convênio (1:1)
+ALTER TABLE Paciente
+ADD COLUMN id_convenio INT UNIQUE,
+ADD CONSTRAINT fk_paciente_convenio FOREIGN KEY (id_convenio) REFERENCES Convenio(id_convenio);
+
+-- Tabela Exame
+CREATE TABLE Exame (
+    id_exame INT AUTO_INCREMENT PRIMARY KEY,
+    tipo VARCHAR(100) NOT NULL,
+    preco DECIMAL(10,2) NOT NULL CHECK (preco >= 0)
+);
+
+-- Tabela Agendamento
+CREATE TABLE Agendamento (
+    id_agendamento INT AUTO_INCREMENT PRIMARY KEY,
+    data_agendamento DATETIME NOT NULL,
+    id_paciente INT NOT NULL,
+    id_medico INT NOT NULL,
+    id_exame INT NOT NULL,
+    CONSTRAINT fk_agendamento_paciente FOREIGN KEY (id_paciente) REFERENCES Paciente(id_paciente),
+    CONSTRAINT fk_agendamento_medico FOREIGN KEY (id_medico) REFERENCES Medico(id_medico),
+    CONSTRAINT fk_agendamento_exame FOREIGN KEY (id_exame) REFERENCES Exame(id_exame)
+);
+
+-- Tabela Resultado
+CREATE TABLE Resultado (
+    id_resultado INT AUTO_INCREMENT PRIMARY KEY,
+    laudo_pdf VARCHAR(255) NOT NULL,
+    id_exame INT NOT NULL,
+    CONSTRAINT fk_resultado_exame FOREIGN KEY (id_exame) REFERENCES Exame(id_exame)
+);
 
 ```
 
@@ -140,7 +199,7 @@ USE loja_virtual;
 
 ```text
 
-```
+```Clinica Ser
 
 ---
 
@@ -210,12 +269,12 @@ CREATE TABLE nome_tabela (
 
 | Nº | Nome da tabela | Finalidade |
 |---:|---|---|
-| 1 |  |  |
-| 2 |  |  |
-| 3 |  |  |
-| 4 |  |  |
-| 5 |  |  |
-| 6 |  |  |
+| 1 |Paciente|Armazena dados pessoais dos pacientes (nome, CPF, telefone, data de nascimento, sexo, imagem)|
+| 2 |Medico|Registra informações dos médicos (nome, CRO, especialidade)|
+| 3 |Convenio|Lista os convênios disponíveis e vincula cada paciente a apenas um convênio|
+| 4 |Exame|Define os tipos de exames realizados, com preço e descrição|
+| 5 |Agendamento|Controla os agendamentos, vinculando paciente, médico e exame em uma data/hora específica|
+| 6 |Resultado|Armazena os laudos em PDF e vincula cada resultado a um exame realizado|
 
 ---
 
@@ -246,12 +305,12 @@ Se `PEDIDO` possui uma FK para `CLIENTE`, então `CLIENTE` deve existir antes de
 
 ## Ordem definida para o seu projeto
 
-1. 
-2. 
-3. 
-4. 
-5. 
-6. 
+1. Paciente
+2. Medico
+3. Convenio
+4. Exame
+5. Agendamento
+6. Resultado
 
 ---
 
@@ -274,11 +333,12 @@ id_cliente INT PRIMARY KEY AUTO_INCREMENT
 ## Chaves primárias implementadas
 
 | Tabela | Chave primária | Utiliza `AUTO_INCREMENT`? |
-|---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
+|Paciente|id_paciente|Sim|
+|Medico|id_medico|Sim|
+|Convenio|id_convenio|Sim|
+|Exame|id_exame|Sim|
+|Agendamento|id_agendamento|Sim|
+|Resultado|id_resultado|Sim|
 
 ---
 
@@ -297,10 +357,17 @@ Não utilize `NOT NULL` indiscriminadamente. A restrição deve refletir uma reg
 ## Campos obrigatórios implementados
 
 | Tabela | Campo | Por que é obrigatório? |
-|---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
+
+Paciente	nome_completo	Identificação essencial do paciente
+Paciente	data_nascimento	Necessário para cadastro clínico
+Paciente	sexo	Informação obrigatória para ficha médica
+Paciente	cpf	Documento único de identificação
+Medico	nome_completo	Identificação essencial do médico
+Medico	crm	Registro profissional obrigatório
+Exame	tipo	Identificação do exame
+Exame	preco	Valor do exame não pode ser nulo
+Agendamento	data_agendamento	Sem data não há agendamento
+Resultado	laudo_pdf	Resultado precisa estar vinculado a um arquivo
 
 ---
 
@@ -323,9 +390,9 @@ cpf CHAR(11) NOT NULL UNIQUE
 ## Restrições `UNIQUE` implementadas
 
 | Tabela | Campo | Por que não pode se repetir? |
-|---|---|---|
-|  |  |  |
-|  |  |  |
+|Paciente|cpf|Cada paciente deve ter apenas um CPF|
+|Medico|cro|Cada médico possui um CRO único|
+|Paciente|id_convenio|Um paciente só pode ter um convenio por vez|
 
 Caso nenhuma seja necessária, justifique:
 
@@ -352,9 +419,9 @@ status VARCHAR(20) NOT NULL DEFAULT 'ATIVO'
 ## Valores padrão utilizados
 
 | Tabela | Campo | DEFAULT | Justificativa |
-|---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
+|Exame|preco|DEFAULT 0.00|Evita valores nulos, mas permite atualização posterior|
+|Paciente|imagem|DEFAULT NULL|Nem todo paciente terá imagem cadastrada|
+|Resultado|laudo_pdf|DEFAULT NULL|Permite criar exame antes de anexar laudo|
 
 Caso não utilize `DEFAULT`, justifique:
 
@@ -406,11 +473,11 @@ Verifique se:
 ## Chaves estrangeiras implementadas
 
 | Tabela | Campo FK | Referencia | Relacionamento |
-|---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-
+|Paciente|id_convenio|Convenio(id_convenio)|Paciente possui convenio|
+|Agendamento|id_paciente|Paciente(id_paciente)|Paciente realiza agendamento|
+|Agendamento|id_medico|Medico(id_medico)|Medico solicita agendamento|
+|Agendamento|id_exame|Exame(id_exame)|Agendamento refere-se a exame|
+|Resultado|id_exame|Exame(id_exame)|Resultado vinculado a exame|
 ---
 
 # 12. Relacionamento N:N
@@ -459,7 +526,7 @@ CREATE TABLE tabela_associativa (
 ## Seu banco possui relacionamento N:N?
 
 - [ ] Sim
-- [ ] Não
+- [x] Não
 
 Se sim, explique como foi implementado:
 
@@ -498,13 +565,19 @@ ADD CONSTRAINT uq_nome UNIQUE (novo_campo);
 
 ```sql
 -- Cole aqui o comando executado.
+ALTER TABLE Paciente
+MODIFY COLUMN telefone VARCHAR(20);
 
 ```
 
 ### Explique a alteração
 
 > Escreva aqui.
+ALTER TABLE Paciente → indica que vamos alterar a tabela Paciente.
 
+MODIFY COLUMN telefone VARCHAR(20) → muda o tipo do campo telefone para aceitar até 20 caracteres (antes estava com 15).
+
+Isso é uma alteração estrutural válida e prática, pois reflete uma necessidade real: armazenar números de telefone mais completos.
 ---
 
 # 14. DROP TABLE — exercício controlado
@@ -529,6 +602,10 @@ DROP TABLE tabela_teste;
 
 ```sql
 -- Cole aqui o teste realizado.
+CREATE TABLE tabela_teste (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    descricao VARCHAR(100)
+);
 
 ```
 
@@ -547,7 +624,8 @@ DROP TABLE tabela;
 ```
 
 > Responda aqui.
-
+DELETE FROM apaga todos os pacientes cadastrados, mas a tabela Paciente continua disponivel.
+DROP TABLE apaga completamente a tabela Paciente do banco.
 ---
 
 # 15. Estrutura genérica completa para adaptar
@@ -716,12 +794,14 @@ Faça isso para cada tabela criada.
 ## Validações realizadas
 
 | Tabela | `DESCRIBE` executado? | Estrutura correta? |
-|---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-
+| Tabela | ``DESCRIBE`` executado? | Estrutura correta? |
+| --- | --- | --- |
+| **[Paciente](ca://s?q=Validar_tabela_Paciente)** | Sim | Deve mostrar ``id_paciente`` como PK, ``cpf`` com UNIQUE, campos obrigatórios com ``NOT ``NULL``. |
+| **[Medico](ca://s?q=Validar_tabela_Medico)** | Sim | Deve mostrar ``id_medico`` como PK, ``crm`` com UNIQUE, ``nome_completo`` obrigatório. |
+| **[Convenio](ca://s?q=Validar_tabela_Convenio)** | Sim | Deve mostrar ``id_convenio`` como PK e ``nome`` obrigatório. |
+| **[Exame](ca://s?q=Validar_tabela_Exame)** | Sim | Deve mostrar ``id_exame`` como PK, ``preco`` com ``CHECK ``(>=0)``, ``tipo`` obrigatório. |
+| **[Agendamento](ca://s?q=Validar_tabela_Agendamento)** | Sim | Deve mostrar ``id_agendamento`` como PK, FKs para ``Paciente``, ``Medico`` e ``Exame``. |
+| **[Resultado](ca://s?q=Validar_tabela_Resultado)** | Sim | Deve mostrar ``id_resultado`` como PK e FK para ``Exame``. |
 ---
 
 # 19. Visualizar o CREATE TABLE gerado pelo MySQL
@@ -808,10 +888,12 @@ Verifique:
 # 21. Registro de problemas encontrados
 
 | Problema | Causa identificada | Como foi resolvido |
-|---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
+| Problema | Causa identificada | Como foi resolvido |
+| --- | --- | --- |
+| Erro ao criar banco ``Clinica_Ser`` | O banco já existia, e o comando ``CREATE ``DATABASE`` não permite duplicidade | Utilizar ``CREATE ``DATABASE ``IF ``NOT ``EXISTS ``Clinica_Ser;`` ou remover o banco antigo com ``DROP ``DATABASE ``Clinica_Ser;`` antes de recriar |
+| Erro ao criar tabela ``Paciente`` | A tabela já existia no banco, e ``CREATE ``TABLE`` não permite recriação sem exclusão | Usar ``CREATE ``TABLE ``IF ``NOT ``EXISTS ``Paciente ``(...);`` ou executar ``DROP ``TABLE ``Paciente;`` antes de recriar |
+| Erro de FOREIGN KEY em tabelas dependentes | A tabela pai não havia sido criada antes da tabela filha, ou o campo referenciado não era chave primária | Ajustar a **ordem de criação** das tabelas e garantir que o campo referenciado seja ``PRIMARY ``KEY`` |
+| Erro de sintaxe em comandos SQL | Faltavam vírgulas, ponto e vírgula, ou nomes estavam inconsistentes | Revisar cada comando, conferindo vírgulas entre colunas, fechamento de parênteses e nomes corretos de tabelas/colunas |
 
 Caso não encontre problemas:
 
@@ -903,26 +985,26 @@ SPRINT5-5.sql
 
 Antes de finalizar:
 
-- [ ] utilizei como base a `SPRINT1-5.md`;
-- [ ] criei um banco de dados;
-- [ ] utilizei `USE`;
-- [ ] criei pelo menos 4 tabelas relacionadas;
-- [ ] todas as tabelas possuem chave primária;
-- [ ] utilizei tipos de dados coerentes;
-- [ ] apliquei `NOT NULL` quando necessário;
-- [ ] apliquei `UNIQUE` quando necessário;
-- [ ] apliquei `DEFAULT` quando necessário;
-- [ ] implementei as chaves estrangeiras necessárias;
-- [ ] respeitei a ordem de criação das tabelas;
-- [ ] tratei corretamente relacionamentos N:N, caso existam;
-- [ ] executei pelo menos um `ALTER TABLE`;
-- [ ] pratiquei `DROP TABLE` em tabela temporária;
-- [ ] executei `DESCRIBE` nas tabelas;
-- [ ] verifiquei as tabelas no painel Schemas;
-- [ ] corrigi erros de execução;
-- [ ] organizei o script final;
-- [ ] salvei o script como `SPRINT2-5.sql`;
-- [ ] preenchi completamente este `SPRINT2-5.md`.
+- [V] utilizei como base a `SPRINT1-5.md`;
+- [V] criei um banco de dados;
+- [V] utilizei `USE`;
+- [V] criei pelo menos 4 tabelas relacionadas;
+- [V] todas as tabelas possuem chave primária;
+- [V] utilizei tipos de dados coerentes;
+- [V] apliquei `NOT NULL` quando necessário;
+- [V] apliquei `UNIQUE` quando necessário;
+- [V] apliquei `DEFAULT` quando necessário;
+- [V] implementei as chaves estrangeiras necessárias;
+- [V] respeitei a ordem de criação das tabelas;
+- [V] tratei corretamente relacionamentos N:N, caso existam;
+- [V] executei pelo menos um `ALTER TABLE`;
+- [V] pratiquei `DROP TABLE` em tabela temporária;
+- [V] executei `DESCRIBE` nas tabelas;
+- [V] verifiquei as tabelas no painel Schemas;
+- [V] corrigi erros de execução;
+- [V] organizei o script final;
+- [V] salvei o script como `SPRINT2-5.sql`;
+- [V] preenchi completamente este `SPRINT2-5.md`.
 
 ---
 

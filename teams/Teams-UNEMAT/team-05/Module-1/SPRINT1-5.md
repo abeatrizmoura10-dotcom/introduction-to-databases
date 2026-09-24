@@ -35,11 +35,11 @@ Nesta Sprint 1/5, o foco é exclusivamente o **planejamento do banco de dados**.
 
 **Nome completo:**
 
-> Preencha aqui.
+> Ylma Cristina Souza Lopes.
 
 **Nome escolhido para o banco de dados:**
 
-```text
+```Clinica
 
 ```
 
@@ -74,6 +74,7 @@ Alguns exemplos:
 ### Tema escolhido
 
 > Escreva aqui.
+Clinica_Ser
 
 ---
 
@@ -90,8 +91,8 @@ A descrição deve responder:
 
 ### Descrição
 
-> Escreva aqui.
-
+>Ele é a representação de uma clinica que realiza exames radiologicos, apenas colaboradores e diretoria, Nome completo, data de nascimento, telefone, sexo, cpf e imgens.
+Pesquisa, arquivamento de imagens em jpg, laudos em pdf e agendamento.
 ---
 
 # 4. Objetivo do banco de dados
@@ -100,7 +101,9 @@ Explique qual é o principal objetivo do banco de dados proposto.
 
 ### Objetivo
 
-> Escreva aqui.
+>  Este banco de dados será responsável por armazenar e organizar os dados cadastrais básicos dos pacientes atendidos pela clinica.
+essas informações identificam de forma única cada cidadão dentro do sistema e servem como base para os demais módulos operacionais presentes, como agendamento
+exames, laudos e resultados. O cadastro de pacientes é o ponto de partida de qualquer atendimento: sem ele, nenhum outro módulo consegue vincular um serviço e uma pessoa especifica. 
 
 ---
 
@@ -112,11 +115,11 @@ Liste as principais funcionalidades ou informações que deverão ser contemplad
 
 ### O banco deverá permitir:
 
-1. 
-2. 
-3. 
-4. 
-5. 
+1. Nome
+2. Telefone
+3. Data de nascimento
+4. Permição de acesso para anexo
+5. Pesquisa
 
 ---
 
@@ -150,12 +153,12 @@ Pagamento
 
 | Nº | Entidade | O que representa? |
 |---:|---|---|
-| 1 |  |  |
-| 2 |  |  |
-| 3 |  |  |
-| 4 |  |  |
-| 5 |  |  |
-| 6 |  |  |
+| 1 | Paciente | Pessoa que realiza os exames |
+| 2 | Médico | Profissional responsável por solicitar ou interpretar exames|
+| 3 | Exame | Procedimento radiológico realizado |
+| 4 | Agendamento  | Registro da data e hora do exame |
+| 5 | Resultado  | Laudo e imagens gerados após o exame |
+| 6 | Convênio | Plano de saúde ou forma de pagamento |
 
 > Como referência para esta atividade, planeje **pelo menos 4 tabelas relacionadas**.
 
@@ -171,15 +174,15 @@ Para cada entidade, identifique os principais atributos que deverão ser armazen
 
 ```text
 
-```
+```Paciente
 
 | Atributo | Informação armazenada | Tipo de dado previsto | Obrigatório? |
-|---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+|id_paciente|Identificador único|Inteiro|Sim|
+|nome  |Nome Completo  |Texto  | Sim |
+|cpf  | Documento de identificação  |Texto  |Sim  |
+|data_nascimento  |Data de nascimento  |Data  |Sim  |
+|telefone  |Contato  |Texto  |Sim  |
+|  |  |  |  
 
 ## Entidade 2
 
@@ -187,15 +190,15 @@ Para cada entidade, identifique os principais atributos que deverão ser armazen
 
 ```text
 
-```
+```Médico
 
 | Atributo | Informação armazenada | Tipo de dado previsto | Obrigatório? |
 |---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+|id_medico  |Identificador único  |Inteiro  | Sim  |
+|nome  |Nome completo  |Texto  |Sim  |
+|Cro  |Registro profissional  |Texto  |Sim  |
+|telefone  |Contato  |Texto  |Sim  |
+|endereço  |Endereço profissional  |Texto  |Sim  |
 
 ## Entidade 3
 
@@ -203,14 +206,14 @@ Para cada entidade, identifique os principais atributos que deverão ser armazen
 
 ```text
 
-```
+```Exame
 
 | Atributo | Informação armazenada | Tipo de dado previsto | Obrigatório? |
 |---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+|id_exame  |identificador único  |Inteiro  | Sim  |
+|tipo_exame  |Tipo (Raio-X, Tomografia, Modelo,Fotos)  |Texto  |Sim  |
+|descrição  |Detalhes do exame  |Texto  |Sim  |
+|preco  |Valor do exame  |Decimal  | Sim  |
 |  |  |  |  |
 
 ## Entidade 4
@@ -219,15 +222,15 @@ Para cada entidade, identifique os principais atributos que deverão ser armazen
 
 ```text
 
-```
+```Agendamento
 
 | Atributo | Informação armazenada | Tipo de dado previsto | Obrigatório? |
 |---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+|id_agendamento  |Identificador único  |Inteiro  |Sim  |
+|id_paciente  |Paciente vinculado  |Inteiro(FK)  |Sim  |
+|id_exame  |Exame vinculado  |Inteiro(FK)  |Sim  |
+|data_hora  |Data e hora do exame  |Data/Hora  |Sim  |
+|id_medico  |Médico solicitante  |Inteiro(FK)  |Sim  |
 
 ## Outras entidades
 
@@ -235,8 +238,8 @@ Caso o projeto possua mais de quatro entidades, registre-as abaixo.
 
 | Entidade | Principais atributos |
 |---|---|
-|  |  |
-|  |  |
+|Resultado  |id_paciente, id_exame, laudo_texto, imagem_url, data_emissao  |
+|Convenio  |id_convenio, nome_conveno, tipo_plano, cobertura  |
 |  |  |
 
 ---
@@ -246,11 +249,13 @@ Caso o projeto possua mais de quatro entidades, registre-as abaixo.
 Cada tabela deverá possuir uma forma de identificar unicamente seus registros.
 
 | Entidade/Tabela | Chave primária prevista | Justificativa |
-|---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
+|Paciente|id_paciente|Identificador único, numérico, AUTO_INCREMENT para evitar duplicidade de pacientes|
+|médico  |id_medico  |Cada médico precisa de um identificador exclusivo, numérico e sequencial  |
+|Exame  |id_exame  | Garante que cada tipo de exame seja único, mesmo que nomes se repitam |
+|Agendamento  |id_agendamento  |Cada agendamento é único, precisa de chave numérica sequencial  |
+|Resultado  |id_resultado  |Cada laudo é único, vinculado a um exame específico  |
+|Convênio  |id_convenio  |Identificador único para cada plano de saúde  |
+
 
 Considere:
 
@@ -277,11 +282,11 @@ Produto aparece em Item_Pedido
 
 | Entidade A | Relacionamento | Entidade B |
 |---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
+|Paciente  |realiza  | Agendamento |
+|Agendamento  | refere-se a | Exame |
+|Médico  | solicita |Agendamento  |
+|Exame  |gera  |Resultado  |
+|Paciente  |possui  |Convênio  |
 
 ---
 
@@ -296,22 +301,22 @@ N:N  → muitos para muitos
 ```
 
 | Relacionamento | Cardinalidade prevista | Justificativa |
-|---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
+|Paciente → Agendamento|1:N|Um paciente pode ter vários agendamentos, mas cada agendamento pertence a um único paciente|
+|Agendamento → Exame  | 1:1  |Cada agendamento refere-se a um exame específico  |
+|Médico → Agendamento  | 1:N  | Um médico pode solicitar vários exames, mas cada agendamento tem apenas um médico solicitante |
+|Exame → Resultado  | 1:1 |Cada exame gera um resultado único  |
+|Paciente → Convênio  | N:1 | Vários pacientes podem estar vinculados ao mesmo convênio |
 
 ---
 
 # 11. Chaves estrangeiras previstas
 
 | Tabela | Atributo previsto como FK | Referencia qual tabela? |
-|---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
+|Agendamento|id_paciente|Paciente|
+|Agendamento  |id_exame  |Exame  |
+|Agendamento  |id_medico  |Médico  |
+|Resultado  |id_exame  |Exame  |
+|Paciente  |id_convenio  |Convênio  |
 
 > As `FOREIGN KEY` serão implementadas posteriormente. Nesta Sprint, apenas planeje os relacionamentos.
 
@@ -331,12 +336,16 @@ AUTO_INCREMENT
 ```
 
 | Tabela | Atributo | Restrição prevista | Motivo |
-|---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+|Paciente|id_paciente|PRIMARY KEY, AUTO_INCREMENT|Identificação única de cada paciente
+|Paciente|cpf  |UNIQUE, NOT NULL  | Evitar duplicidade de cadastros |
+|Médico  |id-medico  |PRIMARY KEY, AUTO_INCREMENT  |Identificação única de cada médico  |
+|Exame  |id_exame  |PRIMARY KEY, AUTO_INCREMENT  |Cada exame precisa ser único  |
+|Exame  |preco  |NOT NULL  |Não pode existir exame sem preço  |
+|agendamento  |id_agendamento  |PRIMARY KEY, AUTO_INCREMENT  |Cada agendamento é único  |
+|Agendamento  |id_paciente, id_exame, id_medico  |FOREIGN KEY  | Garantir integridade referencial  |
+|Resultado  |id_resultado  |PRIMARY KEY, AUTO_INCREMENT  | Cada laudo é único |
+|Resultado  |id_exame  |FOREIGN KEY  |Associar resultado ao exame correto  |
+|Convênio  |id_convenio  | PRIMARY KEY, AUTO_INCREMENT |Identificação única de cada convênio  |
 
 ---
 
@@ -356,11 +365,11 @@ Um empréstimo deve possuir uma data de realização.
 
 ### Regras do seu banco
 
-1. 
-2. 
-3. 
-4. 
-5. 
+1. Um paciente não pode possuir dois cadastros com o mesmo CPF.
+2. Um agendamento deve estar associado a um paciente existente.
+3. Um exame não pode possuir preço negativo.
+4. Um resultado deve estar vinculado a um exame realizado.
+5. Um paciente pode estar associado a apenas um convênio por vez.
 
 ---
 
@@ -388,7 +397,53 @@ CLIENTE 1 ───── N PEDIDO
 
 ```text
 Escreva aqui a estrutura planejada.
-```
+```PACIENTE
+├── id_paciente (PK)
+├── nome
+├── cpf (UNIQUE)
+├── data_nascimento
+├── telefone
+├── endereco
+└── id_convenio (FK)
+
+MÉDICO
+├── id_medico (PK)
+├── nome
+├── crm (UNIQUE)
+├── especialidade
+└── telefone
+
+EXAME
+├── id_exame (PK)
+├── tipo_exame
+├── descricao
+└── preco
+
+AGENDAMENTO
+├── id_agendamento (PK)
+├── id_paciente (FK)
+├── id_exame (FK)
+├── id_medico (FK)
+└── data_hora
+
+RESULTADO
+├── id_resultado (PK)
+├── id_exame (FK)
+├── laudo_texto
+├── imagem_url
+└── data_emissao
+
+CONVÊNIO
+├── id_convenio (PK)
+├── nome_convenio
+├── tipo_plano
+└── cobertura
+
+PACIENTE 1 ───── N AGENDAMENTO  
+MÉDICO 1 ───── N AGENDAMENTO  
+EXAME 1 ───── 1 RESULTADO  
+CONVÊNIO 1 ───── N PACIENTE
+
 
 ---
 
@@ -396,10 +451,12 @@ Escreva aqui a estrutura planejada.
 
 Descreva que tipos de registros deverão existir no banco quando ele for populado.
 
-1. 
-2. 
-3. 
-4. 
+1. Pacientes cadastrados com nome, CPF e convênio.
+2. Médicos com CRO e especialidade.
+3. Exames disponíveis (Raio-X, Tomografia, Modelos, Fotos).
+4. Agendamentos realizados com data e hora.
+5.Resultados com laudos e imagens anexadas.
+6.Convênios aceitos pela clínica.
 
 ---
 
@@ -419,11 +476,11 @@ Quais categorias possuem mais de 5 produtos?
 
 ### Perguntas do seu projeto
 
-1. 
-2. 
-3. 
-4. 
-5. 
+1. Quais pacientes estão cadastrados na clínica?
+2. Quantos agendamentos cada médico solicitou?
+3. Qual é o convênio mais utilizado pelos pacientes?
+4. Quais exames foram realizados em determinado período?
+5. Quais resultados já foram emitidos para um paciente específico?
 
 ---
 
@@ -437,28 +494,28 @@ Caso não existam dúvidas:
 
 > Nenhuma dúvida pendente nesta Sprint.
 
----
+---Nenhuma dúvida
 
 # 18. Checklist da Sprint 1/5
 
-- [ ] identifiquei o aluno responsável;
-- [ ] defini o tema do banco de dados;
-- [ ] descrevi o sistema;
-- [ ] defini o objetivo do banco;
-- [ ] defini o escopo inicial;
-- [ ] identifiquei pelo menos 4 entidades;
-- [ ] planejei os principais atributos;
-- [ ] defini as chaves primárias previstas;
-- [ ] identifiquei os relacionamentos;
-- [ ] defini as cardinalidades iniciais;
-- [ ] identifiquei possíveis chaves estrangeiras;
-- [ ] planejei restrições de integridade;
-- [ ] defini pelo menos 5 regras de negócio;
-- [ ] fiz um esboço da estrutura do banco;
-- [ ] defini os tipos de dados que futuramente serão cadastrados;
-- [ ] defini pelo menos 5 perguntas que o banco deverá responder;
-- [ ] registrei dúvidas ou decisões pendentes;
-- [ ] revisei o arquivo antes de finalizar.
+- [V] identifiquei o aluno responsável;
+- [V] defini o tema do banco de dados;
+- [V] descrevi o sistema;
+- [V] defini o objetivo do banco;
+- [V] defini o escopo inicial;
+- [V] identifiquei pelo menos 4 entidades;
+- [V] planejei os principais atributos;
+- [V] defini as chaves primárias previstas;
+- [V] identifiquei os relacionamentos;
+- [V] defini as cardinalidades iniciais;
+- [V] identifiquei possíveis chaves estrangeiras;
+- [V] planejei restrições de integridade;
+- [V] defini pelo menos 5 regras de negócio;
+- [V] fiz um esboço da estrutura do banco;
+- [V] defini os tipos de dados que futuramente serão cadastrados;
+- [V] defini pelo menos 5 perguntas que o banco deverá responder;
+- [V] registrei dúvidas ou decisões pendentes;
+- [V] revisei o arquivo antes de finalizar.
 
 ---
 

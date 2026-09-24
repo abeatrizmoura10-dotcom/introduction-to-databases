@@ -35,14 +35,13 @@ Nesta Sprint 1/5, o foco é exclusivamente o **planejamento do banco de dados**.
 
 **Nome completo:**
 
-> Preencha aqui.
+> Mariano Lino da Silva Neto.
 
-**Nome escolhido para o banco de dados:**
+**Nome escolhido para o banco de dados: BD_Conveniencia**
 
 ```text
 
 ```
-
 ---
 
 # 2. Tema do banco de dados
@@ -73,8 +72,7 @@ Alguns exemplos:
 
 ### Tema escolhido
 
-> Escreva aqui.
-
+> Vendas e Produtos (Loja de Conveniência).
 ---
 
 # 3. Descrição do sistema
@@ -90,18 +88,14 @@ A descrição deve responder:
 
 ### Descrição
 
-> Escreva aqui.
-
+> O Módulo de Produtos atua como o catalogo central da loja de conveniência. Ele vai ser responsável por armazenar todas as informações dos itens que a loja vende, desde a identificação e a categorização até o preço de venda e a quantidade disponível. 
 ---
 
 # 4. Objetivo do banco de dados
 
-Explique qual é o principal objetivo do banco de dados proposto.
-
 ### Objetivo
 
-> Escreva aqui.
-
+> Recriar num banco de dados como funciona o controle de estoque de uma pequena loja de conveniência, pensei nessa ideia vendo os vídeos de Simulador de mercado do Roblox.
 ---
 
 # 5. Escopo inicial
@@ -112,13 +106,13 @@ Liste as principais funcionalidades ou informações que deverão ser contemplad
 
 ### O banco deverá permitir:
 
-1. 
-2. 
-3. 
-4. 
-5. 
+1. Cadastrar e Classificar produtor por categorias.
+3. Manter um registro das empresas fornecedoras de cada mercadoria.
+4. Controlar a quantidade de produtos disponíveis no estoque.
+5. Regstrar as vendas realizadas no caixa(Data, Hora e Valor total.
+6. Armazenar Exatamente quais produots e quantas unidades sairam de cada venda(nota Fiscal)
 
----
+### Objetivo
 
 # 6. Identificação das entidades
 
@@ -150,10 +144,10 @@ Pagamento
 
 | Nº | Entidade | O que representa? |
 |---:|---|---|
-| 1 |  |  |
-| 2 |  |  |
-| 3 |  |  |
-| 4 |  |  |
+| 1 | Categoria  | Bebidas, Doces e outras coisas |
+| 2 | Produto | Coca Cola, basicamente os produtos que vão conter o ID e o codigo de barras |
+| 3 | Venda | que vai garantir a parte da nota fiscal |
+| 4 | item_venda | lista de tudo oq a gente vendeu |
 | 5 |  |  |
 | 6 |  |  |
 
@@ -167,7 +161,7 @@ Para cada entidade, identifique os principais atributos que deverão ser armazen
 
 ## Entidade 1
 
-**Nome da entidade:**
+**Nome da entidade: Categoria**
 
 ```text
 
@@ -175,15 +169,15 @@ Para cada entidade, identifique os principais atributos que deverão ser armazen
 
 | Atributo | Informação armazenada | Tipo de dado previsto | Obrigatório? |
 |---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
+| id_categoria | identificador unico numerico | INT | Sim |
+| nome_categoria | descrição | VARCHAR(50) | Sim |
 |  |  |  |  |
 |  |  |  |  |
 |  |  |  |  |
 
 ## Entidade 2
 
-**Nome da entidade:**
+**Nome da entidade: Produto**
 
 ```text
 
@@ -191,15 +185,15 @@ Para cada entidade, identifique os principais atributos que deverão ser armazen
 
 | Atributo | Informação armazenada | Tipo de dado previsto | Obrigatório? |
 |---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-
+| id_produto | identificador unico do sistema | INT | Sim |
+| id_categoria | referencia á categoria do item | INT | Sim |
+| codigo_barras | codigo lido pelo scanner do caixa | VARCHAR(50) | Sim |
+| nome_produto | descricao do item para o cliente | VARCHAR(100) | Sim |
+| preco_venda | o valor que será cobrado | DECIMAL(10,2) | Sim |
+| quantidade_estoque |quantidade atual nas prateleiras | INT | SIM |
 ## Entidade 3
 
-**Nome da entidade:**
+**Nome da entidade: Venda**
 
 ```text
 
@@ -207,15 +201,15 @@ Para cada entidade, identifique os principais atributos que deverão ser armazen
 
 | Atributo | Informação armazenada | Tipo de dado previsto | Obrigatório? |
 |---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+| id_venda | identificador da nota fiscal | INT | Sim |
+| data_venda | Dia e hora em que a compra ocorreu | DATETIME | Sim |
+| valor_total | Soma final cobrada do cliente | DECIMAL(10,2) | Sim |
 |  |  |  |  |
 |  |  |  |  |
 
 ## Entidade 4
 
-**Nome da entidade:**
+**Nome da entidade: Item_Venda**
 
 ```text
 
@@ -223,9 +217,9 @@ Para cada entidade, identifique os principais atributos que deverão ser armazen
 
 | Atributo | Informação armazenada | Tipo de dado previsto | Obrigatório? |
 |---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+| id_venda | referencia a qual venda pertence | INT | Sim |
+| id_produto | referencia a qual produto saiu | INT | Sim |
+| quantidade | Quantas unidades foram levadas | INT | Sim |
 |  |  |  |  |
 |  |  |  |  |
 
@@ -247,10 +241,10 @@ Cada tabela deverá possuir uma forma de identificar unicamente seus registros.
 
 | Entidade/Tabela | Chave primária prevista | Justificativa |
 |---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
+| Categoria | id_categoria | valor unico inteiro e imutavel que vai ser gerenciado pelo sistema | 
+| Produto | id_produto | vamos usar ele pra não precisar usar o codigo de barras visto que ele não pode ser afetado pelo fabricante | 
+| Venda | id_venda | identifica unicamente cada cupom gerado no caixa | 
+| Item_Venda | id_venda, id_produto | Chave composta. Garante que o mesmo produto não se repita em linhas separadas no mesmo cupom | 
 
 Considere:
 
@@ -277,9 +271,9 @@ Produto aparece em Item_Pedido
 
 | Entidade A | Relacionamento | Entidade B |
 |---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
+| Categoria | possui | produto |
+| Venda | contem | item_venda |
+| Produto | aparece em | item_Venda |
 |  |  |  |
 |  |  |  |
 
@@ -297,9 +291,9 @@ N:N  → muitos para muitos
 
 | Relacionamento | Cardinalidade prevista | Justificativa |
 |---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
+| Categoria/Produto | 1:N | uma categoria pode ter varios produtos mas um produto só pertence a uma categoria |
+| Venda/Item_venda | 1:N | Na mesma venda podemos ter diferentes itens no carrinho |
+| Produto/item_venda | 1:N | o mesmo produto pode estar sendo vendido em diferentes carrinhos |
 |  |  |  |
 
 ---
@@ -308,9 +302,9 @@ N:N  → muitos para muitos
 
 | Tabela | Atributo previsto como FK | Referencia qual tabela? |
 |---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
+| Produto | id_categoria | Categoria |
+| item_venda | id_venda | Venda |
+| item_venda | id_produto | Produto |
 |  |  |  |
 
 > As `FOREIGN KEY` serão implementadas posteriormente. Nesta Sprint, apenas planeje os relacionamentos.
@@ -332,10 +326,10 @@ AUTO_INCREMENT
 
 | Tabela | Atributo | Restrição prevista | Motivo |
 |---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+| Produto | codigo_barras | UNIQUE | não vai permitir que dois produtos diferentes tenham o mesmo codigo |
+| Produto | preco_venda | CHECK(>=0) | Vai garantir que a gente não tenha um valor com numero negativo |
+| Produto | quantidade_estoque | CHECK(>=0) | Evitar que alguém compre alguma coisa que não tenha no estoque |
+| Venda | data_venda | DEFAULT | isso vai manter a hora do caixa guardado automaticamente |
 |  |  |  |  |
 
 ---
@@ -356,11 +350,11 @@ Um empréstimo deve possuir uma data de realização.
 
 ### Regras do seu banco
 
-1. 
-2. 
-3. 
-4. 
-5. 
+1. Um produto não pode ser cadastrado com preço de venda negativo.
+2. Dois Produtos diferentes não podem possuir o mesmo codigo de barras.
+3. A quantidade em estoque de um produto não pode ser negativa.
+4. Todo produto cadastrado deve pertencer obrigatoriamente a uma categoria valida.
+5. Uma categoria não pode ser excluida do sistema se ja possuir produtos vinculados a ela.
 
 ---
 
@@ -387,7 +381,26 @@ CLIENTE 1 ───── N PEDIDO
 ### Esboço do seu banco
 
 ```text
-Escreva aqui a estrutura planejada.
+CATEGORIA
+|-- id_categoria(PK)
+|--- nome_categoria
+
+PRODUTO
+|-- id_produto(PK)
+|-- id_categoria(FK)
+|-- codigo_barras
+|-- nome_produto
+|-- preco_venda
+|-- quantidade_estoque
+
+ITEM_VENDA
+|-- id_venda (PK/FK)
+|-- id_produto(PK/FK)
+|-- quantidade
+
+CATEGORIA 1 ----- N PRODUTO
+VENDA 1 ---------- N ITEM_VENDA
+PRODUTO 1 --------- N ITEM_VENDA
 ```
 
 ---
@@ -396,10 +409,10 @@ Escreva aqui a estrutura planejada.
 
 Descreva que tipos de registros deverão existir no banco quando ele for populado.
 
-1. 
-2. 
-3. 
-4. 
+1. Categorias da loja
+2. Produtos com Preços e codigos de barras validos
+3. Simulações de registros de vendas realizadas
+4. itens associando os produtos comprados a cada uma dessas vendas
 
 ---
 
@@ -419,17 +432,17 @@ Quais categorias possuem mais de 5 produtos?
 
 ### Perguntas do seu projeto
 
-1. 
-2. 
-3. 
-4. 
-5. 
+1. Quais categorias estão cadastradas no sistema?
+2. Quais produtos estão com a quantidade de estoque zerada no momento?
+3. Quais produtos custam mais de R$ 10,00?
+4. Quais produtos pertecem a categoria "bebidas"?
+5. Qual foi o valor total arrecadado em uma determinada venda
 
 ---
 
 # 17. Decisões e dúvidas pendentes
 
-- 
+- Nenhuma dúvida pendente nesta Sprint.
 - 
 - 
 
@@ -441,24 +454,24 @@ Caso não existam dúvidas:
 
 # 18. Checklist da Sprint 1/5
 
-- [ ] identifiquei o aluno responsável;
-- [ ] defini o tema do banco de dados;
-- [ ] descrevi o sistema;
-- [ ] defini o objetivo do banco;
-- [ ] defini o escopo inicial;
-- [ ] identifiquei pelo menos 4 entidades;
-- [ ] planejei os principais atributos;
-- [ ] defini as chaves primárias previstas;
-- [ ] identifiquei os relacionamentos;
-- [ ] defini as cardinalidades iniciais;
-- [ ] identifiquei possíveis chaves estrangeiras;
-- [ ] planejei restrições de integridade;
-- [ ] defini pelo menos 5 regras de negócio;
-- [ ] fiz um esboço da estrutura do banco;
-- [ ] defini os tipos de dados que futuramente serão cadastrados;
-- [ ] defini pelo menos 5 perguntas que o banco deverá responder;
-- [ ] registrei dúvidas ou decisões pendentes;
-- [ ] revisei o arquivo antes de finalizar.
+- [X] identifiquei o aluno responsável;
+- [X] defini o tema do banco de dados;
+- [X] descrevi o sistema;
+- [X] defini o objetivo do banco;
+- [X] defini o escopo inicial;
+- [X] identifiquei pelo menos 4 entidades;
+- [X] planejei os principais atributos;
+- [X] defini as chaves primárias previstas;
+- [X] identifiquei os relacionamentos;
+- [X] defini as cardinalidades iniciais;
+- [X] identifiquei possíveis chaves estrangeiras;
+- [X] planejei restrições de integridade;
+- [X] defini pelo menos 5 regras de negócio;
+- [X] fiz um esboço da estrutura do banco;
+- [X] defini os tipos de dados que futuramente serão cadastrados;
+- [X] defini pelo menos 5 perguntas que o banco deverá responder;
+- [X] registrei dúvidas ou decisões pendentes;
+- [X] revisei o arquivo antes de finalizar.
 
 ---
 
