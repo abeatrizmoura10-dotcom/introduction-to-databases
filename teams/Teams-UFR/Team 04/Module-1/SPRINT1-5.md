@@ -35,11 +35,11 @@ Nesta Sprint 1/5, o foco é exclusivamente o **planejamento do banco de dados**.
 
 **Nome completo:**
 
-> Preencha aqui.
+> Matheus Bessa.
 
 **Nome escolhido para o banco de dados:**
 
-```text
+```Mercado 
 
 ```
 
@@ -73,7 +73,7 @@ Alguns exemplos:
 
 ### Tema escolhido
 
-> Escreva aqui.
+> Estoque de um mercado.
 
 ---
 
@@ -90,7 +90,7 @@ A descrição deve responder:
 
 ### Descrição
 
-> Escreva aqui.
+> O sistema representa o controle de estoque de um mercado que comercializa diferentes tipos de produtos, como alimentos produzidos na padaria, carnes do açougue, frutas e verduras do hortifruti e produtos de higiene. O banco de dados será utilizado principalmente pelos funcionários e responsáveis pelo estoque e pelo gerenciamento do mercado. O sistema deverá permitir o cadastro dos produtos, categorias e movimentações de estoque.
 
 ---
 
@@ -100,7 +100,7 @@ Explique qual é o principal objetivo do banco de dados proposto.
 
 ### Objetivo
 
-> Escreva aqui.
+> O principal objetivo do banco de dados é organizar e controlar as informações relacionadas ao estoque do mercado, permitindo acompanhar os produtos disponíveis, suas categorias, preços e quantidades.
 
 ---
 
@@ -112,11 +112,12 @@ Liste as principais funcionalidades ou informações que deverão ser contemplad
 
 ### O banco deverá permitir:
 
-1. 
-2. 
-3. 
-4. 
-5. 
+1. Cadastrar e consultar produtos comercializados pelo mercado.
+2. Organizar os produtos por categorias, como padaria, açougue, hortifruti e higiene.
+3. Controlar a quantidade de produtos disponíveis no estoque.
+4. Consultar produtos por categoria, preço e quantidade em estoque.
+5. Identificar produtos que estejam com estoque baixo.
+
 
 ---
 
@@ -150,10 +151,10 @@ Pagamento
 
 | Nº | Entidade | O que representa? |
 |---:|---|---|
-| 1 |  |  |
-| 2 |  |  |
-| 3 |  |  |
-| 4 |  |  |
+| 1 |Produto|Os produtos comercializados pelo mercado. |
+| 2 |Categoria|Os setores ou tipos aos quais os produtos pertencem. |
+| 3 |Movimentacao_Estoque|As entradas e saídas de produtos do estoque |
+| 4 |Quantidade|Quantidade de cade produtos |
 | 5 |  |  |
 | 6 |  |  |
 
@@ -175,11 +176,11 @@ Para cada entidade, identifique os principais atributos que deverão ser armazen
 
 | Atributo | Informação armazenada | Tipo de dado previsto | Obrigatório? |
 |---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+| d_produto | Identificador único do produto | INT | Sim |
+| nome | Nome do produto | VARCHAR(100) | Sim |
+| descricao | Descrição do produto | VARCHAR(255) | Não |
+| preco | Preço de venda do produto | DECIMAL(10,2) | Sim |
+| id_categoria | Categoria à qual o produto pertence | INT | Sim |
 
 ## Entidade 2
 
@@ -187,13 +188,13 @@ Para cada entidade, identifique os principais atributos que deverão ser armazen
 
 ```text
 
-```
+```Categoria
 
 | Atributo | Informação armazenada | Tipo de dado previsto | Obrigatório? |
 |---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+| id_categoria | Identificador único da categoria | INT | Sim |
+| nome | Nome da categoria | VARCHAR(50) |     Sim |
+| descricao | Descrição da categoria | VARCHAR(255) | Não |
 |  |  |  |  |
 |  |  |  |  |
 
@@ -203,12 +204,12 @@ Para cada entidade, identifique os principais atributos que deverão ser armazen
 
 ```text
 
-```
+```entidade
 
 | Atributo | Informação armazenada | Tipo de dado previsto | Obrigatório? |
 |---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
+| Movimentacao_Estoque | id_movimentacao, id_produto, tipo, quantidade, data_movimentacao, observacao |  |  |
+| Fornecedor_Produto | id_fornecedor, id_produto |  |  |
 |  |  |  |  |
 |  |  |  |  |
 |  |  |  |  |
@@ -277,11 +278,11 @@ Produto aparece em Item_Pedido
 
 | Entidade A | Relacionamento | Entidade B |
 |---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
+| Categoria | possui | Produto |
+|Produto  | possui | Estoque |
+| Produto | possui | Movimentacao_Estoque |
+| Fornecedor | fornece | Produto |
+| Produto | pode ser fornecido por | Fornecedor |
 
 ---
 
@@ -297,10 +298,11 @@ N:N  → muitos para muitos
 
 | Relacionamento | Cardinalidade prevista | Justificativa |
 |---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
+| Categoria → Produto | 1:N |     Uma categoria pode possuir vários produtos, mas cada produto pertence a uma categoria. |
+| Produto → Estoque | 1:1 | Cada produto terá um registro de estoque correspondente. |
+| Produto → Movimentacao_Estoque |1:N |     Um produto pode possuir várias movimentações de entrada e saída. |
+| Fornecedor → Produto | N:N | Um fornecedor pode fornecer vários produtos e um produto pode ser fornecido por diferentes fornecedores.
+ |
 
 ---
 
@@ -308,9 +310,9 @@ N:N  → muitos para muitos
 
 | Tabela | Atributo previsto como FK | Referencia qual tabela? |
 |---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
+| Produto |  id_categoria |  |
+| Estoque | id_produto |  |
+| Movimentacao_Estoque | id_produto |  |
 |  |  |  |
 
 > As `FOREIGN KEY` serão implementadas posteriormente. Nesta Sprint, apenas planeje os relacionamentos.
@@ -356,11 +358,12 @@ Um empréstimo deve possuir uma data de realização.
 
 ### Regras do seu banco
 
-1. 
-2. 
-3. 
-4. 
-5. 
+1. Todo produto cadastrado deve pertencer a uma categoria existente.
+2. O preço de um produto não poderá ser menor ou igual a zero.
+3. Toda movimentação de estoque deverá estar relacionada a um produto existente e informar se representa uma entrada ou uma saída.
+4. Cada produto deverá possuir um único registro de estoque para controlar sua quantidade atual.
+5. Uma saída de estoque não deverá permitir que a quantidade disponível fique negativa.
+
 
 ---
 
@@ -389,17 +392,74 @@ CLIENTE 1 ───── N PEDIDO
 ```text
 Escreva aqui a estrutura planejada.
 ```
+CATEGORIA
+├── id_categoria (PK)
+├── nome
+└── descricao
 
+        1
+        │
+        │ possui
+        │
+        N
+
+PRODUTO
+├── id_produto (PK)
+├── nome
+├── descricao
+├── preco
+├── unidade_medida
+├── id_categoria (FK)
+├── estoque_minimo
+└── validade
+
+        │
+        ├──────────────────────┐
+        │                      │
+        │ 1                    │ 1
+        │                      │
+        N                      1
+        │                      │
+ESTOQUE                 MOVIMENTACAO_ESTOQUE
+├── id_estoque (PK)     ├── id_movimentacao (PK)
+├── id_produto (FK)     ├── id_produto (FK)
+├── quantidade          ├── tipo
+├── localizacao         ├── quantidade
+└── data_atualizacao    ├── data_movimentacao
+                         └── observacao
+
+
+FORNECEDOR
+├── id_fornecedor (PK)
+├── razao_social
+├── cnpj
+├── telefone
+├── email
+└── endereco
+
+        N
+        │
+        │
+FORNECEDOR_PRODUTO
+├── id_fornecedor (PK, FK)
+└── id_produto (PK, FK)
+        │
+        │
+        N
+
+PRODUTO
 ---
 
 # 15. Dados que futuramente serão inseridos
 
 Descreva que tipos de registros deverão existir no banco quando ele for populado.
 
-1. 
-2. 
-3. 
-4. 
+1. Quais produtos estão cadastrados no mercado?
+2. Quais produtos pertencem à categoria de padaria, açougue, hortifruti ou higiene?
+
+3. Qual é o preço médio dos produtos de cada categoria?
+4. Qual é a quantidade total de produtos disponível em cada categoria?
+
 
 ---
 
