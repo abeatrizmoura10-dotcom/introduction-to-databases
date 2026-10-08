@@ -421,7 +421,7 @@ GÊNERO
 ├── id_genero (PK)
 ├── nome (UNIQUE)
 ├── descricao
-├── classificacao
+├── classificado
 └── ativo
 
 FILME

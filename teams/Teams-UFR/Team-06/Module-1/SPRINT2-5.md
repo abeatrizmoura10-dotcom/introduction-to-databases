@@ -628,7 +628,7 @@ CREATE TABLE genero (
     id_genero INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(50) NOT NULL UNIQUE,
     descricao VARCHAR(200),
-    classificacao VARCHAR(50),
+    classificado VARCHAR(50),
 
     ativo BOOLEAN NOT NULL DEFAULT TRUE
 );
