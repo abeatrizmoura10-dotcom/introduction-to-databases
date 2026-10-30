@@ -17,6 +17,10 @@ USE locacao_de_filmes;
 -- ============================================================
 -- 1. INNER JOIN 1
 -- ============================================================
+--
+-- Pergunta:
+-- Quais filmes estão cadastrados e a qual gênero cada um pertence?
+--
 
 SELECT
     f.titulo AS filme,
@@ -29,6 +33,10 @@ INNER JOIN genero AS g
 -- ============================================================
 -- 2. INNER JOIN 2
 -- ============================================================
+--
+-- Pergunta:
+-- Quais clientes realizaram locações e em quais datas elas ocorreram?
+--
 
 SELECT
     c.nome AS cliente,
@@ -43,6 +51,10 @@ INNER JOIN locacao AS l
 -- ============================================================
 -- 3. LEFT JOIN
 -- ============================================================
+--
+-- Pergunta:
+-- Quais funcionários estão cadastrados e quantas locações cada um registrou, incluindo funcionários sem locações?
+--
 
 SELECT
     f.nome AS funcionario,
@@ -58,6 +70,11 @@ GROUP BY
 -- ============================================================
 -- 4. RIGHT JOIN
 -- ============================================================
+--
+-- Pergunta:
+-- Quais funcionários estão cadastrados e quais locações foram registradas por eles, 
+-- incluindo funcionários que não registraram locações?
+--
 
 SELECT
     f.nome AS funcionario,
@@ -72,6 +89,10 @@ ORDER BY f.nome;
 -- ============================================================
 -- 5. JOIN COM 3+ TABELAS 1
 -- ============================================================
+--
+-- Pergunta:
+-- Quais clientes alugaram quais filmes?
+--
 
 SELECT
     c.nome AS cliente,
@@ -89,6 +110,10 @@ INNER JOIN filme AS f
 -- ============================================================
 -- 6. JOIN COM 3+ TABELAS 2
 -- ============================================================
+--
+-- Pergunta:
+-- Quais funcionários registraram as locações e para quais clientes?
+--
 
 SELECT
     l.id_locacao,
@@ -105,6 +130,10 @@ INNER JOIN cliente AS c
 -- ============================================================
 -- 7. JOIN + WHERE
 -- ============================================================
+--
+-- Pergunta:
+-- Quais clientes alugaram filmes com avaliação igual ou superior a 7,0?
+--
 
 SELECT
     c.nome AS cliente,
@@ -123,6 +152,10 @@ WHERE f.avaliacao >= 7.0;
 -- ============================================================
 -- 8. JOIN + ORDER BY
 -- ============================================================
+--
+-- Pergunta:
+-- Quais filmes foram alugados, apresentados da maior para a menor avaliação?
+--
 
 SELECT
     f.titulo AS filme,
@@ -139,6 +172,10 @@ ORDER BY f.avaliacao DESC;
 -- ============================================================
 -- 9. JOIN + GROUP BY + AGREGAÇÃO
 -- ============================================================
+--
+-- Pergunta:
+-- Quantas locações cada funcionário registrou?
+--
 
 SELECT
     f.nome AS funcionario,
@@ -155,6 +192,10 @@ ORDER BY quantidade_locacoes DESC;
 -- ============================================================
 -- 10. CONSULTA MAIS ÚTIL
 -- ============================================================
+--
+-- Pergunta:
+-- Quais clientes alugaram quais filmes, em quais datas e qual funcionário registrou a locação?
+--
 
 SELECT
     l.id_locacao,
